@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API</title>
+    <style = "text/css">
+        body {
+            font-size:30px;
+            font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+    </style>
+    <script language = "javascript">
+        function loadFile() {
+            request = new XMLHttpRequest();
+            console.log("1 - request object created");
+
+            request.open("GET", "https://www.boredapi.com/api/activity", true);
+
+            console.log("2 - opened request file");
+
+            request.onreadystatechange = function () {
+                console.log("3 - readystatechange event fired.");
+
+                if (request.readyState == 4 && request.status == 200) {
+
+                    var result = request.responseText;
+
+                    var activity = JSON.parse(result);
+
+                    strHTML = "<ul>";
+                    strHTML += "<li> Activity:&nbsp;&nbsp; " + activity.activity + "</li>";
+                    strHTML += "<li> Category:&nbsp;&nbsp; " + activity.type + "</li>";
+                    strHTML += "<li> Participants:&nbsp;&nbsp; " + activity.participants + "</li>";
+                    strHTML += "<li> Price:&nbsp;&nbsp; " + activity.price + "</li>";
+                    strHTML += "</ul>";
+                    
+					document.getElementById("data").innerHTML =strHTML;
+                }
+                else if (request.readyState == 4 && request.status != 200) {
+
+				    document.getElementById("data").innerHTML = "Something is wrong!  Check the logs to see where this went off the rails";
+
+				}
+
+				else if (request.readyState == 3) {
+
+					document.getElementById("data").innerHTML = "Too soon!  Try again";
+
+				}
+            }
+            request.send();
+			console.log("4 - Request sent");
+        }
+    </script>
+</head>
+<body onload = "loadFile()">
+    <h1>Activity Idea </h1>
+    <div id = "data">Loading...</div>
+    <form>
+        <input type = "submit" value = "Generate another random Activity!">
+    </form>
+    
+</body>
+</html>
